@@ -1,8 +1,8 @@
-import INDUSTRY_PROFILES from '../server/data/industryProfile.js';
-import { getCurrentWeather } from './_services/openweather.js';
-import { getPollution } from './_services/openaq.js';
+const INDUSTRY_PROFILES = require('../server/data/industryProfile');
+const { getCurrentWeather } = require('./_services/openweather');
+const { getPollution } = require('./_services/openaq');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     try {
         const city = req.query.city || 'Delhi';
         const industry = req.query.industry || 'Generic Industrial Zone';
@@ -11,13 +11,11 @@ export default async function handler(req, res) {
             INDUSTRY_PROFILES[industry] ||
             INDUSTRY_PROFILES['Generic Industrial Zone'];
 
-        // Fetch base data
         const [weather, pollution] = await Promise.all([
             getCurrentWeather(city),
             getPollution(city)
         ]);
 
-        // ---- Basic forecast logic (rule-based) ----
         const pm25 = pollution?.pollutants?.pm25?.value || 0;
         const wind = weather?.current?.windSpeed || 0;
 
@@ -76,7 +74,7 @@ export default async function handler(req, res) {
         console.error('Forecast API error:', err);
         res.status(500).json({
             success: false,
-            error: 'Failed to generate forecast'
+            error: 'Forecast generation failed'
         });
     }
-}
+};
