@@ -17,7 +17,8 @@ const Forecast = {
     /**
      * Load forecast data
      */
-    async load(city, industry) {
+    async load(city = 'Delhi', industry = 'Generic Industrial Zone') {
+
         if (this.isLoading) return;
         
         this.isLoading = true;
@@ -47,8 +48,8 @@ const Forecast = {
             console.log('Rendering forecast:', response);
             const { forecast, aiInsights, city } = response;
 
-            if (!forecast) {
-                console.error('Forecast data missing');
+            if (!forecast || !forecast.overallRisk) {
+                this.showError('Forecast unavailable');
                 return;
             }
 
