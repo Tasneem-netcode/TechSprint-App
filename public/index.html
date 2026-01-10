@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EcoSphere AI - Industrial Environmental Intelligence Platform for India">
+    <title>EcoSphere AI | Environmental Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-modal">
+            <div class="login-header">
+                <div class="logo-large">
+                    <span class="logo-icon">🌍</span>
+                    <h1>EcoSphere AI</h1>
+                </div>
+                <p class="tagline">Industrial Environmental Intelligence Platform</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span>Sign In</span>
+                    <span class="btn-icon">→</span>
+                </button>
+                
+                <div class="login-divider">
+                    <span>or</span>
+                </div>
+                
+                <button type="button" class="btn btn-google btn-full" id="googleLoginBtn">
+                    <svg class="google-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span>Continue with Google</span>
+                </button>
+                
+                <p class="demo-note">
+                    <strong>Demo:</strong> Enter any email/password to explore the platform
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">EcoSphere AI</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#forecast" class="nav-item" data-page="forecast">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">Risk Forecast</span>
+                </a>
+                <a href="#pollution" class="nav-item subitem" data-page="pollution">
+                    <span class="nav-icon">🧪</span>
+                    <span class="nav-text">Pollution Predictor</span>
+                </a>
+                <a href="#report" class="nav-item subitem" data-page="report">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Report Incident</span>
+                </a>
+                <a href="#admin" id="adminNav" class="nav-item" data-page="admin" style="display:none;">
+                    <span class="nav-icon">🔒</span>
+                    <span class="nav-text">Admin</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="city-selector">
+                    <label for="citySelect">Monitoring Location</label>
+                    <select id="citySelect">
+                        <option value="Delhi">Delhi NCR</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                        <option value="Lucknow">Lucknow</option>
+                    </select>
+                </div>
+                
+                
+                <div class="user-section">
+                    <div class="user-info">
+                        <span class="user-avatar" id="userAvatar">U</span>
+                        <span class="user-name" id="userName">User</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn" title="Sign Out">
+                        <span>↗</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Page 1: Dashboard -->
+            <section id="dashboardPage" class="page active">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Current Environmental Conditions</h1>
+                        <p class="header-subtitle">Real-time situational awareness for <span id="dashboardCity">Delhi NCR</span></p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-refresh" id="refreshBtn">
+                            <span class="refresh-icon">↻</span>
+                            <span>Refresh</span>
+                        </button>
+                        <span class="last-updated" id="lastUpdated">Last updated: --</span>
+                    </div>
+                </header>
+
+                <!-- HERO SECTION: Current Environmental Snapshot -->
+                <div class="hero-snapshot" id="heroSnapshot">
+                    <div class="hero-content">
+                        <div class="hero-header">
+                            <h2>Current Environmental Snapshot</h2>
+                            <span class="risk-badge" id="heroRiskBadge">--</span>
+                        </div>
+                        <p class="hero-explanation" id="heroExplanation">Loading environmental situation analysis...</p>
+                    </div>
+                </div>
+
+
+
+                <!-- IMPACT PRIORITY CARDS -->
+                <div class="impact-priority-section">
+                    <h3>Impact Priorities</h3>
+                    <div class="impact-grid" id="impactGrid">
+                        <!-- Human Health -->
+                        <div class="impact-priority-card" id="healthCard">
+                            <div class="priority-badges">
+                                <span class="priority-rank">P1</span>
+                                <span class="impact-risk" id="healthBadge">--</span>
+                            </div>
+                            <div class="impact-icon">🫁</div>
+                            <h4>Human Health</h4>
+                            <p class="impact-reason" id="healthDescription">Loading...</p>
+                        </div>
+
+                        <!-- Ecosystems -->
+                        <div class="impact-priority-card" id="ecosystemCard">
+                            <div class="priority-badges">
+                                <span class="priority-rank">P2</span>
+                                <span class="impact-risk" id="ecosystemBadge">--</span>
+                            </div>
+                            <div class="impact-icon">🌿</div>
+                            <h4>Ecosystems</h4>
+                            <p class="impact-reason" id="ecosystemDescription">Loading...</p>
+                        </div>
+
+                        <!-- Environment (Air) -->
+                        <div class="impact-priority-card" id="environmentCard">
+                            <div class="priority-badges">
+                                <span class="priority-rank">P3</span>
+                                <span class="impact-risk" id="environmentBadge">--</span>
+                            </div>
+                            <div class="impact-icon">💨</div>
+                            <h4>Environment (Air)</h4>
+                            <p class="impact-reason" id="environmentDescription">Loading...</p>
+                        </div>
+
+                        <!-- Socio-Economic -->
+                        <div class="impact-priority-card" id="socioEconomicCard">
+                            <div class="priority-badges">
+                                <span class="priority-rank">P4</span>
+                                <span class="impact-risk" id="socioEconomicBadge">--</span>
+                            </div>
+                            <div class="impact-icon">🏭</div>
+                            <h4>Socio-Economic</h4>
+                            <p class="impact-reason" id="socioEconomicDescription">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SMART ENVIRONMENTAL ALERTS -->
+                <div class="alerts-section" id="smartAlertsSection">
+                    <h3>🚨 Smart Environmental Alerts</h3>
+                    <p class="alerts-subtitle">Automated, rule-based signals to support situational awareness</p>
+
+                    <div class="alerts-grid" id="alertsList">
+                        <!-- Dynamically populated alert cards -->
+                    </div>
+
+                    <div class="alerts-footer" id="alertsFooter">
+                        <small class="data-transparency">Based on public environmental data + rule-based analysis</small>
+                        <p class="alerts-disclaimer">EcoSphere AI provides decision-support insights. This does not replace regulatory monitoring or on-site testing.</p>
+                    </div>
+                </div>
+
+                <!-- AI INTERPRETATION (Collapsible) -->
+                <div class="ai-interpretation-section">
+                    <button class="ai-collapse-btn" id="aiCollapseBtn">
+                        <span class="ai-icon">🧠</span>
+                        <span class="ai-label">Why is this happening?</span>
+                        <span class="collapse-icon">▼</span>
+                    </button>
+                    <div class="ai-content collapsed" id="aiContent">
+                        <div class="ai-text-wrapper">
+                            <p id="aiInsightText">Loading AI interpretation...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENVIRONMENTAL DISPERSION CONDITIONS (Renamed Weather Section) -->
+                <div class="dispersion-section">
+                    <h3>Environmental Dispersion Conditions</h3>
+                    <p class="section-subtitle">How weather factors are affecting pollutant behavior right now.</p>
+                    <div class="dispersion-grid">
+                        <div class="dispersion-card">
+                            <span class="dispersion-icon">🌬️</span>
+                            <div class="dispersion-info">
+                                <span class="dispersion-label">Wind Dispersion</span>
+                                <span class="dispersion-value" id="weatherWind">-- km/h</span>
+                                <span class="dispersion-context">affects transport</span>
+                            </div>
+                        </div>
+                        <div class="dispersion-card">
+                            <span class="dispersion-icon">💧</span>
+                            <div class="dispersion-info">
+                                <span class="dispersion-label">Humidity</span>
+                                <span class="dispersion-value" id="weatherHumidity">--%</span>
+                                <span class="dispersion-context">affects particle weight</span>
+                            </div>
+                        </div>
+                        <div class="dispersion-card">
+                            <span class="dispersion-icon">👁️</span>
+                            <div class="dispersion-info">
+                                <span class="dispersion-label">Visibility</span>
+                                <span class="dispersion-value" id="weatherVisibility">-- km</span>
+                                <span class="dispersion-context">visual clarity</span>
+                            </div>
+                        </div>
+                        <div class="dispersion-card">
+                            <span class="dispersion-icon">🌡️</span>
+                            <div class="dispersion-info">
+                                <span class="dispersion-label">Temperature</span>
+                                <span class="dispersion-value" id="weatherTemp">--°C</span>
+                                <span class="dispersion-context">conditions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 2: Risk Forecast -->
+            <section id="forecastPage" class="page">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Environmental Risk Forecast</h1>
+                        <p class="header-subtitle">Short-term and long-term environmental outlook for <span id="forecastCity">Delhi NCR</span></p>
+                    </div>
+                    <div class="header-actions">
+                        <div class="industry-selector-header">
+                            <select id="industrySelect">
+                                <option value="Generic Industrial Zone">🏭 Generic Industrial Zone</option>
+                                <option value="Thermal Power Plant">🏭 Thermal Power Plant</option>
+                                <option value="Cement Manufacturing">🏭 Cement Manufacturing</option>
+                                <option value="Textile & Dyeing">🏭 Textile & Dyeing</option>
+                                <option value="Chemical / Petrochemical">🏭 Chemical / Petrochemical</option>
+                                <option value="Steel & Metallurgy">🏭 Steel & Metallurgy</option>
+                                <option value="Agriculture">🌾 Agriculture</option>
+                                <option value="Fishing">🦞 Fishing</option>
+                                <option value="Forestry">🌲 Forestry</option>
+                                <option value="Mining">⛏️ Mining</option>
+                                <option value="Oil Drilling">🛢️ Oil Drilling</option>
+                                <option value="Automobile Manufacturing">🚗 Automobile Manufacturing</option>
+                                <option value="Textile Production">🧵 Textile Production</option>
+                                <option value="Construction">🏗️ Construction</option>
+                                <option value="Food Processing">🍽️ Food Processing</option>
+                            </select>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Overall Risk Summary -->
+                <div class="forecast-summary" id="forecastSummary">
+                    <div class="summary-header">
+                        <h2>Overall Risk Summary</h2>
+                        <span class="summary-badge" id="summaryBadge">--</span>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-item">
+                            <span class="summary-label">Risk Level</span>
+                            <span class="summary-value" id="summaryRiskLevel">--</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Primary Concern</span>
+                            <span class="summary-value" id="summaryPrimaryConcern">--</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Time Horizon</span>
+                            <span class="summary-value" id="summaryTimeHorizon">--</span>
+                        </div>
+                    </div>
+                    <div class="summary-ai" id="summaryAI">
+                        <div class="ai-badge"><span>✨</span> AI Forecast Analysis</div>
+                        <p id="summaryAIText">Loading forecast analysis...</p>
+                    </div>
+                </div>
+
+                <!-- Short-Term Environmental Stress Outlook -->
+                <div class="forecast-section stress-outlook">
+                    <div class="section-header">
+                        <div class="header-titles">
+                            <h3>🌦️ Short-Term Environmental Stress Outlook</h3>
+                            <p class="outlook-subtitle">Next 48–72 hours · Condition-based analysis</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 3.1 Environmental Stress Windows -->
+                    <div class="stress-windows-grid" id="stressWindows">
+                        <!-- Dynamically populated -->
+                    </div>
+
+                    <!-- 3.3 Weather x Pollution Interaction -->
+                    <div class="behavior-analysis-panel">
+                        <h4>🌬️ Environmental Behavior Analysis</h4>
+                        <p id="behaviorAnalysisText">Loading environmental behavior analysis...</p>
+                    </div>
+
+                    <!-- 3.2 Exposure Type Breakdown -->
+                    <div class="exposure-breakdown-grid" id="exposureBreakdown">
+                         <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Long-Term Forecast -->
+                <div class="forecast-section long-term">
+                    <div class="section-header">
+                        <h3>📆 Long-Term Risk Forecast</h3>
+                        <span class="timeframe">Years to Decades</span>
+                    </div>
+                    <div class="long-term-grid" id="longTermGrid">
+                        <div class="long-term-card" id="chemicalCard">
+                            <div class="lt-icon">⚗️</div>
+                            <h4>Chemical Accumulation</h4>
+                            <span class="lt-level" id="chemicalLevel">--</span>
+                            <p id="chemicalDescription">Loading...</p>
+                        </div>
+                        <div class="long-term-card" id="groundwaterCard">
+                            <div class="lt-icon">💧</div>
+                            <h4>Groundwater Risk</h4>
+                            <span class="lt-level" id="groundwaterLevel">--</span>
+                            <p id="groundwaterDescription">Loading...</p>
+                        </div>
+                        <div class="long-term-card" id="soilCard">
+                            <div class="lt-icon">🌱</div>
+                            <h4>Soil Contamination</h4>
+                            <span class="lt-level" id="soilLevel">--</span>
+                            <p id="soilDescription">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Drivers -->
+                <div class="forecast-section">
+                    <div class="section-header">
+                        <h3>🔍 Risk Drivers</h3>
+                    </div>
+                    <div class="risk-drivers" id="riskDrivers">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Early Warning Indicators -->
+                <div class="forecast-section">
+                    <div class="section-header">
+                        <h3>⚡ Early Warning Indicators</h3>
+                    </div>
+                    <div class="early-warnings" id="earlyWarnings">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Preventive Actions -->
+                <div class="forecast-section actions-section">
+                    <div class="section-header">
+                        <h3>✅ Recommended Preventive Actions</h3>
+                    </div>
+                    <div class="preventive-actions" id="preventiveActions">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Pollution Predictor moved to its own page -->
+            </section>
+
+            <!-- Pollution Predictor Page (moved out) -->
+            <section id="pollutionPage" class="page">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Pollution Predictor</h1>
+                        <p class="header-subtitle">Quick AI-local analysis for chemicals commonly used in selected industries.</p>
+                    </div>
+                </header>
+
+                <div class="forecast-section" id="pollutionPredictor">
+                    <div class="pp-grid">
+                        <div class="pp-left">
+                            <h4>Select Industry</h4>
+                            <div id="ppIndustryList" class="pp-industry-list"></div>
+                        </div>
+
+                        <div class="pp-mid">
+                            <h4>Chemicals</h4>
+                            <div id="ppChemicals" class="pp-chemicals"></div>
+
+                            <div class="pp-custom">
+                                <input id="ppCustomChemical" placeholder="Add custom chemical" />
+                                <button id="ppAddChemical" class="btn small">Add</button>
+                            </div>
+
+                            <div class="pp-actions">
+                                <button id="ppAnalyzeBtn" class="btn btn-primary">Analyze Selection</button>
+                            </div>
+                        </div>
+
+                        <div class="pp-right">
+                            <h4>Results</h4>
+                            <div id="ppResults" class="pp-results"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Separate Report Incident Page -->
+            <section id="reportPage" class="page">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Report Incident</h1>
+                        <p class="header-subtitle">Report environmental incidents (non-emergency).</p>
+                    </div>
+                </header>
+
+                <div class="forecast-section" id="reportWrapper">
+                    <div id="reportIncidentSection" class="mt-0"></div>
+                </div>
+            </section>
+
+            <!-- Admin Page -->
+            <section id="adminPage" class="page">
+                <header class="page-header">
+                    <div class="header-content">
+                        <h1>Admin - Review Reports</h1>
+                        <p class="header-subtitle">Moderate and verify incoming reports.</p>
+                    </div>
+                </header>
+
+                <div class="forecast-section">
+                    <div id="adminReports" class="admin-reports"></div>
+                    <div id="adminPager" class="admin-pager mt-4"></div>
+                </div>
+            </section>
+
+            <!-- Disclaimer Footer -->
+            <footer class="disclaimer-footer">
+                <p>
+                    <strong>Disclaimer:</strong> EcoSphere AI provides decision-support insights based on public environmental data and research. 
+                    It does not replace regulatory monitoring, on-site testing, or medical advice.
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading environmental data...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/api.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/forecast.js"></script>
+    <script src="/js/pollutionPredictor.js"></script>
+    <script src="/js/reportIncident.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
