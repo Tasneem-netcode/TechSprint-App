@@ -86,44 +86,62 @@ const Dashboard = {
         this.initCollapsible();
     },
 
-    renderHeroSnapshot(riskAnalysis, aiInsights) {
-        const heroSnapshot = document.getElementById('heroSnapshot');
-        const badge = document.getElementById('heroRiskBadge');
-        const explanation = document.getElementById('heroExplanation');
+    renderHeroSnapshot(riskAnalysis = {}, aiInsights = '') {
+    const heroSnapshot = document.getElementById('heroSnapshot');
+    const badge = document.getElementById('heroRiskBadge');
+    const explanation = document.getElementById('heroExplanation');
 
-        const { overallRisk, primaryConcerns } = riskAnalysis;
-        const level = (overallRisk.level || 'Moderate').toLowerCase();
+    const overallRisk = riskAnalysis.overallRisk || {
+        level: 'Moderate',
+        aqi: 'N/A'
+    };
 
+    const primaryConcerns = Array.isArray(riskAnalysis.primaryConcerns)
+        ? riskAnalysis.primaryConcerns
+        : [];
+
+    const level = (overallRisk.level || 'Moderate').toLowerCase();
+
+    if (heroSnapshot) {
         heroSnapshot.className = `hero-snapshot risk-${level}`;
+    }
 
-        if (badge) {
-            badge.textContent = `${overallRisk.level} Risk`;
-            badge.className = 'risk-badge';
-        }
+    if (badge) {
+        badge.textContent = `${overallRisk.level} Risk`;
+        badge.className = 'risk-badge';
+    }
 
-        let explanationText = primaryConcerns?.[0] || 'Environmental conditions are stable.';
+    let explanationText = 'Environmental conditions are currently stable.';
 
-        if (typeof aiInsights === 'string') {
-            const firstSentence = aiInsights.split('.')[0];
-            if (firstSentence.length > 10) explanationText = `${firstSentence}.`;
-        }
+    if (primaryConcerns.length > 0) {
+        explanationText = primaryConcerns[0] + '.';
+    }
 
-        if (explanation) explanation.textContent = explanationText;
-    },
+    if (typeof aiInsights === 'string') {
+        const firstSentence = aiInsights.split('.')[0];
+        if (firstSentence.length > 10) explanationText = firstSentence + '.';
+    }
 
-    renderPriorityCards(impacts) {
-        const renderCard = (id, data) => {
-            const badge = document.getElementById(`${id}Badge`);
-            const desc = document.getElementById(`${id}Description`);
-            if (badge) badge.textContent = data.level;
-            if (desc) desc.textContent = data.description;
-        };
+    if (explanation) explanation.textContent = explanationText;
+},
 
-        renderCard('health', impacts.humanHealth);
-        renderCard('ecosystem', impacts.ecosystems);
-        renderCard('environment', impacts.environment);
-        renderCard('socioEconomic', impacts.socioEconomic);
-    },
+    renderPriorityCards(impacts = {}) {
+    const safe = (obj) => obj || { level: 'Moderate', description: 'Monitoring ongoing.' };
+
+    const renderCard = (id, data) => {
+        const badge = document.getElementById(`${id}Badge`);
+        const desc = document.getElementById(`${id}Description`);
+        const d = safe(data);
+
+        if (badge) badge.textContent = d.level;
+        if (desc) desc.textContent = d.description;
+    };
+
+    renderCard('health', impacts.humanHealth);
+    renderCard('ecosystem', impacts.ecosystems);
+    renderCard('environment', impacts.environment);
+    renderCard('socioEconomic', impacts.socioEconomic);
+},
 
     renderAIAnalysis(insights) {
         const el = document.getElementById('aiInsightText');

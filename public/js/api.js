@@ -32,6 +32,9 @@ const API = {
 
     async getRisk(city = "Delhi") {
       return API.request(`/api/risk?city=${encodeURIComponent(city)}`);
+    },
+    async getForecast(city, industry) {
+        return API.request(`/api/forecast?city=${encodeURIComponent(city)}&industry=${encodeURIComponent(industry)}`);
     }
   }
 };
