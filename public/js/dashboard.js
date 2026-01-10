@@ -159,7 +159,12 @@ const Dashboard = {
         this.updateElement('weatherTemp', `${c.temperature}°C`);
         this.updateElement('weatherHumidity', `${c.humidity}%`);
         this.updateElement('weatherWind', `${c.windSpeed} km/h`);
-        this.updateElement('weatherVisibility', `${c.visibility} km`);
+        const visibilityKm =
+        typeof c.visibility === 'number'
+            ? `${(c.visibility / 1000).toFixed(1)} km`
+            : 'N/A';
+
+    this.updateElement('weatherVisibility', visibilityKm);
     },
 
     generateSmartAlerts(response) {
