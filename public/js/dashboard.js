@@ -34,17 +34,18 @@ const Dashboard = {
 
             // 🔁 Reconstruct old response shape (so UI doesn’t break)
             const response = {
-                success: true,
-                city,
-                industry,
-                timestamp: new Date().toISOString(),
-                data: {
-                    weather: environment.weather,
-                    airQuality: pollution,
-                    riskAnalysis: risk.riskAnalysis,
-                    aiInsights: risk.aiInsights
-                }
-            };
+    success: true,
+    city,
+    industry,
+    timestamp: new Date().toISOString(),
+    data: {
+        weather: environment.weather,
+        airQuality: pollution,
+        riskAnalysis: risk.riskAnalysis || risk.risk || risk,
+        aiInsights: risk.aiInsights || ''
+    }
+};
+
 
             this.data = response.data;
             this.render(response);
